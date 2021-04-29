@@ -40,7 +40,7 @@ public class RobotContainer {
     configureButtonBindings();
     chooser.setDefaultOption("Drive Distance", driveDistance);
     chooser.addOption("Drive Forward", driveForward);
-    chooser.addOption("Turn Time", turnTime);
+    chooser.addOption("Turn robot for select amount of time", turnTime);
     SmartDashboard.putData(chooser);
   }
 
