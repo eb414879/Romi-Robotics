@@ -13,6 +13,7 @@ import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.DriveDistance;
 import frc.robot.commands.DriveForward;
 import frc.robot.commands.TurnTime;
+import frc.robot.sensors.RomiGyro;
 import frc.robot.subsystems.RomiDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 
@@ -32,16 +33,33 @@ public class RobotContainer {
 
   private final Joystick controller = new Joystick(0);
   
-  private final SendableChooser<Command> chooser = new SendableChooser<>();
+  private final SendableChooser<Command> autonChooser = new SendableChooser<>();
+
+  private final RomiGyro gyro = new RomiGyro();
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    chooser.setDefaultOption("Drive Distance", driveDistance);
-    chooser.addOption("Drive Forward", driveForward);
-    chooser.addOption("Turn robot for select amount of time", turnTime);
-    SmartDashboard.putData(chooser);
+    plotStaticSmartDashboardValues();
+    }
+    
+    private void plotStaticSmartDashboardValues() {
+      autonChooser.setDefaultOption("Drive distance", driveDistance);
+      autonChooser.setDefaultOption("Drive forward", driveForward);
+      autonChooser.addOption("Turn robot for selelct amount of time", turnTime);
+      SmartDashboard.putData(autonChooser);
+
+      //Show encoder values
+      SmartDashboard.putNumber("Left encoder distance (in)", m_romiDrivetrain.getLeftDistanceInch());
+  }
+
+  public void plotDynamicSmartDashboardValues() {
+    SmartDashboard.putNumber("Left encoder distance (in)", m_romiDrivetrain.getLeftDistanceInch());
+    SmartDashboard.putNumber("Right encoder distance (in)", m_romiDrivetrain.getRightDistanceInch());
+    SmartDashboard.putNumber("Gyro angle x", gyro.getAngleX());
+    SmartDashboard.putNumber("Gyro angle y", gyro.getAngleY());
+    SmartDashboard.putNumber("Gyro angle z", gyro.getAngleZ());
   }
 
   /**
@@ -63,6 +81,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return chooser.getSelected();
+    return autonChooser.getSelected();
   }
 }
